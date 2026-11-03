@@ -1,0 +1,39 @@
+python
+CopyEdit
+import random
+import matplotlib.pyplot as plt
+bucket_capacity = 10
+leak_rate = 2
+simulation_time = 30
+bucket_content = 0
+packets_dropped = 0
+packets_sent = 0
+time_points = []
+incoming_packets = []
+dropped_packets = []
+bucket_sizes = []
+for t in range(simulation_time):
+    incoming = random.randint(0, 5)  # bursty incoming packets
+space_left = bucket_capacity - bucket_content
+    if incoming <= space_left:
+bucket_content += incoming
+    else:
+packets_dropped += (incoming - space_left)
+bucket_content = bucket_capacity
+    leak = min(leak_rate, bucket_content)
+bucket_content -= leak
+packets_sent += leak 
+time_points.append(t)
+incoming_packets.append(incoming)
+dropped_packets.append(packets_dropped)
+bucket_sizes.append(bucket_content)
+    print(f"Time {t}s: Incoming={incoming}, Bucket={bucket_content}, Dropped={packets_dropped}")
+# Plotting the results
+plt.plot(time_points, incoming_packets, label='Incoming Packets')
+plt.plot(time_points, bucket_sizes, label='Bucket Content')
+plt.plot(time_points, dropped_packets, label='Packets Dropped')
+plt.xlabel('Time (s)')
+plt.ylabel('Packets')
+plt.title('Leaky Bucket Congestion Control')
+plt.legend()
+plt.show()
